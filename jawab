@@ -1,0 +1,127 @@
+# Data pemilih dan calon
+pemilih = [
+    {"NIK": "101", "nama": "Andi", "jurusan": "Informatika", "sudah_memilih": False},
+    {"NIK": "102", "nama": "Budi", "jurusan": "Sistem Informasi", "sudah_memilih": False},
+    {"NIK": "103", "nama": "Citra", "jurusan": "Teknik Komputer", "sudah_memilih": False}
+]
+
+calon = [
+    {"NIM": "A01", "nama": "Rina", "visi": "Maju Bersama", "misi": "Transparan dan Aktif", "jumlah_suara": 0},
+    {"NIM": "A02", "nama": "Doni", "visi": "Solidaritas", "misi": "Kerja Nyata", "jumlah_suara": 0}
+]
+# Fungsi voting dan validasi
+def cari_pemilih(nik):
+    for p in pemilih:
+        if p["NIK"] == nik:
+            return p
+    return None
+
+def cari_calon(nim):
+    for c in calon:
+        if c["NIM"] == nim:
+            return c
+    return None
+
+def proses_voting(nik, nim):
+    pemilih_data = cari_pemilih(nik)
+    calon_data = cari_calon(nim)
+
+    if not pemilih_data:
+        return " NIK tidak ditemukan."
+    if pemilih_data["sudah_memilih"]:
+        return " Anda sudah memilih."
+    if not calon_data:
+        return " NIM calon tidak valid."
+
+    calon_data["jumlah_suara"] += 1
+    pemilih_data["sudah_memilih"] = True
+    return f" Terima kasih {pemilih_data['nama']}, suara Anda untuk {calon_data['nama']} telah tercatat."
+
+# Menampilkan hasil dan statistik
+def tampilkan_hasil():
+    print("\n📊 Hasil Sementara:")
+    for c in calon:
+        print(f"{c['nama']} (NIM: {c['NIM']}) - {c['jumlah_suara']} suara")
+
+def tampilkan_statistik():
+    total = len(pemilih)
+    sudah = sum(1 for p in pemilih if p["sudah_memilih"])
+    persentase = (sudah / total) * 100 if total > 0 else 0
+
+    pemenang = max(calon, key=lambda x: x["jumlah_suara"])
+
+    print("\n📈 Statistik Pemilih:")
+    print(f"Total pemilih            : {total}")
+    print(f"Jumlah sudah memilih     : {sudah}")
+    print(f"Persentase partisipasi   : {persentase:.2f}%")
+    print(f"Suara terbanyak sementara: {pemenang['nama']} ({pemenang['jumlah_suara']} suara)")
+
+# Menu interaktif
+def menu():
+    while True:
+        print("\n=== SISTEM E-VOTING KETUA ORGANISASI ===")
+        print("1. Voting")
+        print("2. Tampilkan Hasil Sementara")
+        print("3. Tampilkan Statistik Pemilih")
+        print("0. Keluar")
+        pilihan = input("Pilih menu: ")
+
+        if pilihan == "1":
+            nik = input("Masukkan NIK Anda: ")
+            nim = input("Masukkan NIM calon: ")
+            print(proses_voting(nik, nim))
+        elif pilihan == "2":
+            tampilkan_hasil()
+        elif pilihan == "3":
+            tampilkan_statistik()
+        elif pilihan == "0":
+            print("Terima kasih. Sistem keluar.")
+            break
+        else:
+            print("Pilihan tidak valid.")
+
+# Jalankan menu
+menu()
+
+#output yang akan muncul ketika kita run
+=== SISTEM E-VOTING KETUA ORGANISASI ===
+1. Voting
+2. Tampilkan Hasil Sementara
+3. Tampilkan Statistik Pemilih
+0. Keluar
+Pilih menu: 1
+Masukkan NIK Anda: 101
+Masukkan NIM calon: A01
+✅ Terima kasih Andi, suara Anda untuk Rina telah tercatat.
+
+=== SISTEM E-VOTING KETUA ORGANISASI ===
+1. Voting
+2. Tampilkan Hasil Sementara
+3. Tampilkan Statistik Pemilih
+0. Keluar
+Pilih menu: 2
+
+📊 Hasil Sementara:
+Rina (NIM: A01) - 1 suara
+Doni (NIM: A02) - 0 suara
+
+=== SISTEM E-VOTING KETUA ORGANISASI ===
+1. Voting
+2. Tampilkan Hasil Sementara
+3. Tampilkan Statistik Pemilih
+0. Keluar
+Pilih menu: 3
+
+📈 Statistik Pemilih:
+Total pemilih            : 3
+Jumlah sudah memilih     : 1
+Persentase partisipasi   : 33.33%
+Suara terbanyak sementara: Rina (1 suara)
+
+=== SISTEM E-VOTING KETUA ORGANISASI ===
+1. Voting
+2. Tampilkan Hasil Sementara
+3. Tampilkan Statistik Pemilih
+0. Keluar
+Pilih menu: 0
+Terima kasih. Sistem keluar.
